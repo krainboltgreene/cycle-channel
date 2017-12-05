@@ -1,0 +1,17 @@
+[ignore]
+.*/node_modules/.*
+.*/transpiled/.*
+.*/coverage/.*
+.*/.nyc_output/.*
+.*/test.js
+.*/example/.*
+
+[include]
+./source/
+
+[libs]
+flow-typed/
+
+[options]
+all=true
+module.name_mapper='^types$' ->'<PROJECT_ROOT>/types'

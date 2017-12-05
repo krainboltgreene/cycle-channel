@@ -1,0 +1,25 @@
+{
+  "presets": [
+    "env",
+    "flow"
+  ],
+  "plugins": [
+    ["flow-runtime"],
+    [
+      "module-resolver",
+      {
+        "alias": {
+          "^types$": "./types"
+        }
+      }
+    ],
+    "transform-object-rest-spread"
+  ],
+  "env": {
+    "test": {
+      "plugins": [
+        "istanbul"
+      ]
+    }
+  }
+}
