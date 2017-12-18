@@ -21,43 +21,15 @@ import {networkResponseSignals} from "cycle-channel-http"
 import {storageReadSignals} from "cycle-channel-storage"
 import intent from "snabbdom-intent"
 
-// NOTE: This is the start of your application's state. You might want something more complicated than this.
-const initialState = {}
+// NOTE: See https://github.com/krainboltgreene/snabbdom-intents for more information
+const intents = {
+  onChangeSearch: intent({change: ["updateFormField", "fetchSearchResult"]})
+}
 
-// NOTE: Reactions are the functions that fire in response to certain signals. They receive the current state and the payload). They return the next state:
-// reaction:: State => {event?: Event, [name?: Key]: mixed} => State
-const reactions = {
-  updateFormField: (state) => ({event, form, field}) => {
-    return mergeDeepRight(
-      state
-    )(
-      recordFrom(["ephemeral", "forms", form, field])(event.target.value)
-    )
-  },
-  mergeResources: (state) => ({data}) => {
-    return mergeDeepRight(
-      state
-    )({
-      resources: treeify([groupBy(keyChain(["attributes", "type"])), indexBy(key("id"))])(data)
-    })
-  },
-}
-// NOTE: Transforms are functions that take state and a payload and turn them into transmissions meant for drivers. For example, you may want a button press to trigger a http request. They must return a Transmission:
-// transform:: State => {event?: Event, [name?: Key]: mixed} =>
-const transformers = {
-  fetchSearchResult: (state) => ({event}) => {
-    return {
-      driver: "network",
-      data: {
-        method: "GET",
-        url: `https://api.example.com/search?query=${event.target.value}`,
-        headers: {Authorization: `Basic ${state.ephemeral.authorization}`},
-      },
-    }
-  },
-}
-const intents = {onChangeSearch: intent({change: ["updateFormField", "fetchSearchResult"]})}
+// NOTE: This function will render our view layer.
 const render = ({state}) => {
+
+  // NOTE: See https://github.com/krainboltgreene/snabbdom-intents for more information
   const withSearch = intents.onChangeSearch({
     form: "search",
     field: "query",
@@ -74,15 +46,58 @@ const render = ({state}) => {
 }
 const application = ({view, network, storage}) => {
   return channel({
+    // NOTE: Signals are streams of signal emits, mapped from sources. The below functions each know how to turn a native event from that source into a standardized signal that can be reacted to or transformed into a message.
     signals: [
+      // NOTE: For example, this is a stream of signals from view layer events
       viewEventSignals(view),
+
+      // NOTE: This is a stream of signals from http responses
       networkResponseSignals(network),
+
+      // NOTE: This is a stream of signals from the local storage driver
       storageReadSignals(storage),
     ],
-    initialState,
-    reactions,
-    transformers,
+
+    // NOTE: This is the start of your application's state. You might want something more complicated than this.
+    initialState: {},
+
+    // NOTE: Reactions are the functions that fire in response to certain signals. They receive the current state and the payload). They return the next state:
+    reactions: {
+      // reaction:: State => {event?: Event, [name?: Key]: mixed} => State
+      updateFormField: (state) => ({event, form, field}) => {
+        return mergeDeepRight(
+          state
+        )(
+          recordFrom(["ephemeral", "forms", form, field])(event.target.value)
+        )
+      },
+      mergeResources: (state) => ({data}) => {
+        return mergeDeepRight(
+          state
+        )({
+          resources: treeify([groupBy(keyChain(["attributes", "type"])), indexBy(key("id"))])(data)
+        })
+      },
+    },
+
+    // NOTE: Transforms are functions that take state and a payload and turn them into transmissions meant for drivers. For example, you may want a button press to trigger a http request. They must return a Transmission:
+    transformers: {
+      // transform:: State => {event?: Event, [name: Key]?: mixed} => {driver: string, data: mixed}
+      fetchSearchResult: (state) => ({event}) => {
+        return {
+          driver: "network",
+          data: {
+            method: "GET",
+            url: `https://api.example.com/search?query=${event.target.value}`,
+            headers: {Authorization: `Basic ${state.ephemeral.authorization}`},
+          },
+        }
+      },
+    },
+    // NOTE: Drains are sinks that always happen, regardless of the type of message. Views are a good example, because state might have changed
     drains: {view: stateDriver(render)},
+
+    // NOTE: Vents are sinks that only happen when a Message has the `driver` property of the same name as the key, so a the above search request would go down the network sink.
     vents: {
       network: dataDriver(),
       storage: dataDriver(),
