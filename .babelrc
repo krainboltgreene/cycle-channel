@@ -4,7 +4,6 @@
     "flow"
   ],
   "plugins": [
-    ["flow-runtime"],
     [
       "module-resolver",
       {
@@ -18,7 +17,8 @@
   "env": {
     "test": {
       "plugins": [
-        "istanbul"
+        "istanbul",
+        "flow-runtime"
       ]
     }
   }
