@@ -4,7 +4,12 @@
 ![Stability][BADGE_STABILITY]
 ![Dependencies][BADGE_DEPENDENCY]
 
-A single pipeline of sources to sinks. The point of cycle-channel is to provide a unified interface for incoming streams to be mapped to outgoing streams. This kind of logic often gets written by hand and instead I prefer to have something stable.
+Cycle.js is a fantastic framework for handling the cyclical stream-based nature of UI, but it doesn't give that full-framework feeling by itself. In comes cycle-channel, explained by the below image:
+
+
+![Explination][EXPLINATION]
+
+This means that cycle-channel is a single pipeline of driver sources to driver sinks. The core point of cycle-channel (and the sublibraries) is to provide a unified interface for data and actions and their intertwined behavior. This kind of logic often gets written by hand and instead I prefer to have something stable.
 
 
 ## Usage
@@ -116,3 +121,4 @@ run(application, drivers)
 [BADGE_TRAVIS]: https://img.shields.io/travis/krainboltgreene/cycle-channel.svg?maxAge=2592000&style=flat-square
 [BADGE_STABILITY]: https://img.shields.io/badge/stability-strong-green.svg?maxAge=2592000&style=flat-square
 [BADGE_DEPENDENCY]: https://img.shields.io/david/krainboltgreene/cycle-channel.svg?maxAge=2592000&style=flat-square
+[EXPLINATION]: assets/explination.png
