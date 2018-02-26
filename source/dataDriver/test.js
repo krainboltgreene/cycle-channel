@@ -17,14 +17,12 @@ test("with a mapper", ({same, end}) => {
     {
       children: null,
       data: {
-        attrs: {
-          aria: null,
-          data: null,
-        },
-        hook: {},
-        on: {},
-        props: {},
-        style: {},
+        "attrs": {},
+        "class": {},
+        "hook": {},
+        "on": {},
+        "props": {},
+        "style": {},
       },
       elm: null,
       key: null,
