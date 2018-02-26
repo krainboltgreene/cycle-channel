@@ -1,12 +1,13 @@
 /* eslint-disable flowtype/require-parameter-type, flowtype/require-return-type */
 import {test} from "tap"
-import xstream from "xstream"
+import {from} from "most"
+import {of} from "most"
 import streamSatisfies from "@unction/streamsatisfies"
 
 import beatsFrom from "./"
 
-test("Multiple signals", ({same, equal, end}) => {
-  const signals = xstream.from([
+test("Multiple signals", ({same, equal, doesNotThrow, end}) => {
+  const signals = from([
     {
       name: "updateFormField",
       payload: {
@@ -30,7 +31,7 @@ test("Multiple signals", ({same, equal, end}) => {
       },
     },
   ])
-  const states = xstream.of({})
+  const states = of({})
 
   streamSatisfies(
     [
@@ -66,7 +67,7 @@ test("Multiple signals", ({same, equal, end}) => {
   )(
     (given) => (expected) => same(given, expected)
   )(
-    end
+    doesNotThrow
   )(
     ({length}) =>
       (position) => {
@@ -78,8 +79,8 @@ test("Multiple signals", ({same, equal, end}) => {
   )
 })
 
-test("Single signal", ({same, equal, end}) => {
-  const signals = xstream.from([
+test("Single signal", ({same, equal, doesNotThrow, end}) => {
+  const signals = from([
     {
       name: "updateFormField",
       payload: {
@@ -88,7 +89,7 @@ test("Single signal", ({same, equal, end}) => {
       },
     },
   ])
-  const states = xstream.of({})
+  const states = of({})
 
   streamSatisfies(
     [
@@ -106,7 +107,7 @@ test("Single signal", ({same, equal, end}) => {
   )(
     (given) => (expected) => same(given, expected)
   )(
-    end
+    doesNotThrow
   )(
     ({length}) =>
       (position) => {

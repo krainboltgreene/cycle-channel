@@ -1,6 +1,6 @@
 /* eslint-disable flowtype/require-parameter-type, flowtype/require-return-type, import/max-dependencies */
 import {test} from "tap"
-import xstream from "xstream"
+import {from} from "most"
 import streamSatisfies from "@unction/streamsatisfies"
 import mergeDeepRight from "@unction/mergedeepright"
 import recordFrom from "@unction/recordfrom"
@@ -15,7 +15,7 @@ import dataDriver from "../dataDriver"
 import channel from "./"
 
 const signals = [
-  xstream.from([
+  from([
     {
       name: "updateFormField",
       payload: {
@@ -85,7 +85,7 @@ const transformers = {
   },
 }
 
-test("drain", ({similar, equal, end}) => {
+test("drain", ({similar, equal, end, doesNotThrow}) => {
   const {view} = channel({
     signals,
     initialState,
@@ -113,7 +113,7 @@ test("drain", ({similar, equal, end}) => {
   )(
     (given) => (expected) => similar(given, expected)
   )(
-    end
+    doesNotThrow
   )(
     ({length}) =>
       (position) => {
@@ -125,7 +125,7 @@ test("drain", ({similar, equal, end}) => {
   )
 })
 
-test("vent", ({same, equal, end}) => {
+test("vent", ({same, equal, end, doesNotThrow}) => {
   const {network} = channel({
     signals,
     initialState,
@@ -147,7 +147,7 @@ test("vent", ({same, equal, end}) => {
   )(
     (given) => (expected) => same(given, expected)
   )(
-    end
+    doesNotThrow
   )(
     ({length}) =>
       (position) => {

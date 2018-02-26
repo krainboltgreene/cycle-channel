@@ -11,13 +11,13 @@ import type {TransmissionPartialFunctionType} from "types"
 import type {SinkMappersType} from "types"
 import type {TransmissionType} from "types"
 
-export default function sinksFrom (transmissions: Stream<TransmissionType>): Function {
+export default function sinksFrom (transmissions: StreamType<TransmissionType>): Function {
   return function sinksFromTransmissions (drains: SinkMappersType): Function {
     return function sinksFromTransmissionsDrains (vents: SinkMappersType): SinksType {
       return mergeRight(
         mapWithValueKey(
           (mapper: TransmissionPartialFunctionType): Function =>
-            (name: string): Stream<mixed> =>
+            (name: string): StreamType<mixed> =>
               intoMessage(name)(mapper)(transmissions)
         )(
           vents

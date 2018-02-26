@@ -1,14 +1,14 @@
 /* eslint-disable flowtype/require-parameter-type, flowtype/require-return-type */
 import {test} from "tap"
-import xstream from "xstream"
+import {from} from "most"
 import streamSatisfies from "@unction/streamsatisfies"
 
 import intoSink from "./"
 
-test("with name", ({equal, end}) => {
+test("with name", ({equal, end, doesNotThrow}) => {
   const driver = "view"
   const mapper = ({data}) => data.toLowerCase()
-  const transmissions = xstream.fromArray([
+  const transmissions = from([
     {
       driver: "view",
       data: "BBB",
@@ -30,7 +30,7 @@ test("with name", ({equal, end}) => {
       (expected) =>
         equal(given, expected)
   )(
-    end
+    doesNotThrow
   )(
     ({length}) =>
       (position) => {
@@ -42,10 +42,10 @@ test("with name", ({equal, end}) => {
   )
 })
 
-test("without name", ({equal, end}) => {
+test("without name", ({equal, end, doesNotThrow}) => {
   const driver = null
   const mapper = ({data}) => data.toLowerCase()
-  const transmissions = xstream.fromArray([
+  const transmissions = from([
     {
       driver: "view",
       data: "BBB",
@@ -67,7 +67,7 @@ test("without name", ({equal, end}) => {
       (expected) =>
         equal(given, expected)
   )(
-    end
+    doesNotThrow
   )(
     ({length}) =>
       (position) => {

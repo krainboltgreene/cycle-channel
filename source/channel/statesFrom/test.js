@@ -8,7 +8,7 @@ import key from "@unction/key"
 import keyChain from "@unction/keychain"
 import groupBy from "@unction/groupby"
 import indexBy from "@unction/indexby"
-import xstream from "xstream"
+import {of} from "most"
 
 import statesFrom from "./"
 
@@ -28,8 +28,8 @@ const initialState = {
   },
 }
 
-test(({same, equal, end}) => {
-  const signals = xstream.of({
+test(({same, equal, end, doesNotThrow}) => {
+  const signals = of({
     name: "updateFormField",
     payload: {
       form: "search",
@@ -61,7 +61,7 @@ test(({same, equal, end}) => {
   )(
     (given) => (expected) => same(given, expected)
   )(
-    end
+    doesNotThrow
   )(
     ({length}) =>
       (position) => {

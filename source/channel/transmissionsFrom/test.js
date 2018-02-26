@@ -1,11 +1,11 @@
 /* eslint-disable flowtype/require-parameter-type, flowtype/require-return-type */
 import {test} from "tap"
-import xstream from "xstream"
+import {from} from "most"
 import streamSatisfies from "@unction/streamsatisfies"
 
 import transmissionsFrom from "./"
 
-test(({same, equal, end}) => {
+test(({same, equal, end, doesNotThrow}) => {
   const actions = {
     requestSearch: (state) => ({event}) => {
       return {
@@ -19,7 +19,7 @@ test(({same, equal, end}) => {
       }
     },
   }
-  const beats = xstream.from([
+  const beats = from([
     {
       state: {
         ephemeral: {
@@ -118,7 +118,7 @@ test(({same, equal, end}) => {
       (expected) =>
         same(given, expected)
   )(
-    end
+    doesNotThrow
   )(
     ({length}) =>
       (position) => {

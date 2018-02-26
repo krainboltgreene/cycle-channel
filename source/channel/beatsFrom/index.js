@@ -1,20 +1,19 @@
-import xstream from "xstream"
-import mapValues from "@unction/mapvalues"
+import {combine} from "most"
 
-import type {Stream} from "types"
+import type {StreamType} from "types"
 import type {SignalType} from "types"
 import type {StateType} from "types"
 import type {BeatType} from "types"
 
-export default function beatsFrom (signals: Stream<SignalType>): Function {
-  return function beatsFromSignals (states: Stream<StateType>): Stream<BeatType> {
-    return mapValues(
-      ([state, signal]: [StateType, SignalType]): Stream<BeatType> => ({
+export default function beatsFrom (signals: StreamType<SignalType>): Function {
+  return function beatsFromSignals (states: StreamType<StateType>): StreamType<BeatType> {
+    return combine(
+      (state: StateType, signal: SignalType): BeatType => ({
         state,
         signal,
-      })
-    )(
-      xstream.combine(states, signals)
+      }),
+      states,
+      signals
     )
   }
 }

@@ -9,7 +9,7 @@ import type {SignalsType} from "types"
 
 export default function statesFrom (reactions: ReactionsType): Function {
   return function statesFromReactions (initial: StateType): Function {
-    return function statesFromReactionsInitial (signals: SignalsType): Stream<StateType> {
+    return function statesFromReactionsInitial (signals: SignalsType): StreamType<StateType> {
       return reduceValues(
         intoState(reactions)
       )(

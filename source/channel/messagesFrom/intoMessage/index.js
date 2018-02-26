@@ -10,7 +10,7 @@ import type {MessageType} from "types"
 
 export default function intoMessage (type: string | null): Function {
   return function intoMessageType (mapper: TransmissionPartialFunctionType): Function {
-    return function intoMessageTypeMapper (transmissions: Stream<TransmissionType>): Stream<MessageType> {
+    return function intoMessageTypeMapper (transmissions: StreamType<TransmissionType>): StreamType<MessageType> {
       if (type) {
         return mapValues(
           mapper

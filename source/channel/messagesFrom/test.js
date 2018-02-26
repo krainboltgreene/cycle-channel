@@ -1,14 +1,14 @@
 /* eslint-disable flowtype/require-parameter-type, flowtype/require-return-type */
 import {test} from "tap"
-import xstream from "xstream"
+import {from} from "most"
 import streamSatisfies from "@unction/streamsatisfies"
 import {p} from "snabbdom-helpers"
 
 import messagesFrom from "./"
 
-test("drain only", ({similar, equal, end}) => {
+test("drain only", ({similar, equal, end, doesNotThrow}) => {
   const render = ({state}) => p({children: state.name || "No one"})
-  const transmissions = xstream.from([
+  const transmissions = from([
     {
       driver: "heartbeat",
       signal: "test",
@@ -52,7 +52,7 @@ test("drain only", ({similar, equal, end}) => {
       (expected) =>
         similar(given, expected)
   )(
-    end
+    doesNotThrow
   )(
     ({length}) =>
       (position) => {
@@ -64,9 +64,9 @@ test("drain only", ({similar, equal, end}) => {
   )
 })
 
-test("vent only", ({same, equal, end}) => {
+test("vent only", ({same, equal, end, doesNotThrow}) => {
   const passthrough = ({data}) => data
-  const transmissions = xstream.from([
+  const transmissions = from([
     {
       driver: "heartbeat",
       signal: "test",
@@ -99,7 +99,7 @@ test("vent only", ({same, equal, end}) => {
       (expected) =>
         same(given, expected)
   )(
-    end
+    doesNotThrow
   )(
     ({length}) =>
       (position) => {
